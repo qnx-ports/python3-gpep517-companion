@@ -1,0 +1,36 @@
+# Maintainer: Leo Shen <yishen@qnx.com>
+# Alpine-Maintainer: Peter Shkenev <santurysim@gmail.com>
+pkgname=python3-gpep517
+_pkgname=gpep517
+pkgver=19
+pkgrel=2
+pkgdesc="Minimal backend script to aid installing Python packages through PEP 517-compliant build systems"
+url="https://github.com/mgorny/gpep517/"
+arch="noarch"
+license="MIT"
+depends="python3 python3-installer"
+source="https://github.com/mgorny/gpep517/archive/v$pkgver/gpep517-v$pkgver.tar.gz
+    gpep517
+    default-bytecode-levels.patch
+    "
+builddir="$srcdir/$_pkgname-$pkgver"
+
+check() {
+    python3 -m gpep517 --help
+}
+
+package() {
+    local sitedir="$(python3 -c 'import site;print(site.getsitepackages()[0])')"
+    mkdir -p "$pkgdir/$sitedir"
+    find gpep517 -name "*.orig" -delete
+    cp -r gpep517 "$pkgdir/$sitedir"
+    python3 -m compileall "$pkgdir/$sitedir"
+
+    install -Dm755 "$srcdir"/gpep517 -t "$pkgdir"/usr/bin
+}
+
+sha512sums="
+463c3812f388ea7ef83aaf6b3b90de4036b0a8200038a654621822c02d46627f7adf2ed4c7accf016293f89b8c3a2080d9ac80d2f82caaa3fdd370aa98c4335b  gpep517-v19.tar.gz
+0833286540cf100bed9307d86c88586e26f426dcab4dbe7208804953dcce7bfb31a97271b682a27a4263e8b3df579bcffa6cfa845f68b2c8a5fcab9ec2d56311  gpep517
+d9a8c02a31d03e29a796ea05cc43c90b582cc84deedd1180cc72a7b0e549d11006630fe66f92c8bcf15af1437e30748d55445f2ccc6f0716d1a53a5b97d0402a  default-bytecode-levels.patch
+"
