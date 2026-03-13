@@ -3,7 +3,7 @@
 pkgname=python3-gpep517
 _pkgname=gpep517
 pkgver=19
-pkgrel=2
+pkgrel=${pkgrel:-0}
 pkgdesc="Minimal backend script to aid installing Python packages through PEP 517-compliant build systems"
 url="https://github.com/mgorny/gpep517/"
 arch="noarch"
@@ -29,6 +29,7 @@ package() {
     install -Dm755 "$srcdir"/gpep517 -t "$pkgdir"/usr/bin
 }
 
+options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 463c3812f388ea7ef83aaf6b3b90de4036b0a8200038a654621822c02d46627f7adf2ed4c7accf016293f89b8c3a2080d9ac80d2f82caaa3fdd370aa98c4335b  gpep517-v19.tar.gz
 0833286540cf100bed9307d86c88586e26f426dcab4dbe7208804953dcce7bfb31a97271b682a27a4263e8b3df579bcffa6cfa845f68b2c8a5fcab9ec2d56311  gpep517
